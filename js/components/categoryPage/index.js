@@ -5,9 +5,10 @@ import { Container, Header, Title, Content, Text, Button, Icon } from 'native-ba
 
 import { openDrawer } from '../../actions/drawer';
 import { popRoute } from '../../actions/route';
+import TabBar from '../../components/tabBar/';
 import styles from './styles';
 
-class BlankPage extends Component {
+class CategoryPage extends Component {
 
   static propTypes = {
     popRoute: React.PropTypes.func,
@@ -42,7 +43,10 @@ class BlankPage extends Component {
           <Text>
             {(!isNaN(index)) ? list[index] : 'Create Something Awesome . . .'}
           </Text>
+        <TabBar>
+        </TabBar>
         </Content>
+
       </Container>
     );
   }
@@ -63,4 +67,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, bindAction)(BlankPage);
+export default connect(mapStateToProps, bindAction)(CategoryPage);

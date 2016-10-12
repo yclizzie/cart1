@@ -8,8 +8,11 @@ import { Grid, Row } from 'react-native-easy-grid';
 import { openDrawer, closeDrawer } from '../../actions/drawer';
 import { replaceRoute, replaceOrPushRoute, pushNewRoute } from '../../actions/route';
 import { setIndex } from '../../actions/list';
-import myTheme from '../../themes/base-theme';
+import { statusBarColor, myTheme } from '../../themes/base-theme';
+import TabBar from '../../components/tabBar/';
+import CategoryPage from '../../components/categoryPage';
 import styles from './styles';
+import renderIf from '../../renderIf';
 
 class Home extends Component {
 
@@ -21,6 +24,7 @@ class Home extends Component {
     pushNewRoute: React.PropTypes.func,
     setIndex: React.PropTypes.func,
     name: React.PropTypes.string,
+    content: React.PropTypes.string,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
   }
 
@@ -33,22 +37,58 @@ class Home extends Component {
     this.props.pushNewRoute(route);
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: this.props.content
+    };
+  }
+
+  _renderContent(props) {
+    if (props.content === 'category') {
+      return (
+        <View style={{flex: 1}}>
+          <CategoryPage />
+        </View>
+      );
+    } else {
+      return (
+          <Grid style={styles.mt}>
+            {this.props.list.map((item, i) =>
+              <Row key={i}>
+                <TouchableOpacity
+                  style={styles.row}
+                  onPress={() => this.pushNewRoute('blankPage', i)}
+                >
+                  <Text style={styles.text}>{item}</Text>
+                </TouchableOpacity>
+              </Row>
+            )}
+          </Grid>
+      );
+    }
+
+  }
+
   render() {
     return (
       <Container theme={myTheme} style={styles.container}>
         <Header>
-          <Button transparent onPress={() => this.replaceRoute('login')}>
-            <Icon name="ios-power" />
-          </Button>
-
-          <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
-
           <Button transparent onPress={this.props.openDrawer}>
             <Icon name="ios-menu" />
           </Button>
+          <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
+          <Button transparent onPress={() => this.replaceRoute('login')}>
+            <Icon name="ios-cart" />
+          </Button>
+
         </Header>
 
         <Content>
+        {renderIf(this.state.content === 'category')(
+          <CategoryPage />
+        )}
+
           <Grid style={styles.mt}>
             {this.props.list.map((item, i) =>
               <Row key={i}>
@@ -62,7 +102,10 @@ class Home extends Component {
             )}
           </Grid>
         </Content>
+
       </Container>
+
+
     );
   }
 }

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { BackAndroid, Platform, StatusBar, Navigator } from 'react-native';
+import { BackAndroid, Platform, StatusBar, Navigator, View, ScrollView, Text} from 'react-native';
 import { connect } from 'react-redux';
 import { Drawer } from 'native-base';
 
@@ -10,8 +10,10 @@ import { popRoute } from './actions/route';
 import Login from './components/login/';
 import Home from './components/home/';
 import BlankPage from './components/blankPage';
+import TabBar from './components/tabBar';
 import SplashPage from './components/splashscreen/';
 import SideBar from './components/sideBar';
+import CategoryPage from './components/categoryPage';
 import { statusBarColor } from './themes/base-theme';
 
 Navigator.prototype.replaceWithAnimation = function replaceWithAnimation(route) {
@@ -92,11 +94,18 @@ class AppNavigator extends Component {
       case 'splashscreen':
         return <SplashPage navigator={navigator} />;
       case 'login':
-        return <Login navigator={navigator} />;
+       return  <TabBar tab="greenTab" navigator={navigator} />;
+        //return <Login navigator={navigator} />;
       case 'home':
-        return <Home navigator={navigator} />;
+       return  <TabBar tab="blueTab" navigator={navigator} />;
+        //return <Home navigator={navigator} />;
       case 'blankPage':
-        return <BlankPage navigator={navigator} />;
+        return  <TabBar tab="redTab" navigator={navigator} />;
+        //return <BlankPage navigator={navigator} />;
+      case 'tabBar':
+        return  <TabBar tab="blueTab" navigator={navigator} />;
+      case 'categoryPage':
+        return  <TabBar tab="blueTab" content="category" navigator={navigator} />;
       default :
         return <Login navigator={navigator} />;
     }
@@ -125,7 +134,7 @@ class AppNavigator extends Component {
           }}
           configureScene={() => Navigator.SceneConfigs.FloatFromRight}
           initialRoute={{
-            id: (Platform.OS === 'android') ? 'splashscreen' : 'login',
+            id: (Platform.OS === 'android') ? 'splashscreen' : 'home',
             statusBarHidden: true,
           }}
           renderScene={this.renderScene}

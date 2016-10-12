@@ -16,6 +16,10 @@ module.exports = StyleSheet.create({
     marginBottom: 15,
     alignItems: 'center',
   },
+  hidden: {
+    width: 0,
+    height: 0,
+  },
   mt: {
     marginTop: 20,
   },
