@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, InputGroup, Input, Button, Icon, View } from 'native-base';
+import { Container, Content, InputGroup, Input, Button, Icon, View, Text} from 'native-base';
 
 import { replaceRoute } from '../../actions/route';
-import { setUser } from '../../actions/user';
+import { loginUser } from '../../actions/user';
 import styles from './styles';
 
 const background = require('../../../images/shadow.png');
@@ -13,24 +13,29 @@ const background = require('../../../images/shadow.png');
 class Login extends Component {
 
   static propTypes = {
-    setUser: React.PropTypes.func,
+    loginUser: React.PropTypes.func,
     replaceRoute: React.PropTypes.func,
+    name: React.PropTypes.string,
+    email: React.PropTypes.string,
+    telephone: React.PropTypes.string,
+    error: React.PropTypes.string,
   }
 
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-    };
+    // this.state = {
+    //   email: '',
+    //   password: '',
+    //   error: ''
+    // };
   }
 
-  setUser(name) {
-    this.props.setUser(name);
+  loginUser(email, password) {
+    this.props.loginUser(email, password);
   }
 
-  replaceRoute(route) {
-    this.setUser(this.state.name);
-    this.props.replaceRoute(route);
+  onLoginButtonClick() {
+    this.loginUser(this.state.email, this.state.password);
   }
 
   render() {
@@ -40,18 +45,20 @@ class Login extends Component {
           <Content>
             <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
+                <Text>{this.props.error}</Text>
                 <InputGroup style={styles.input}>
                   <Icon name="ios-person" />
-                  <Input placeholder="EMAIL" onChangeText={name => this.setState({ name })} />
+                  <Input placeholder="EMAIL" onChangeText={email => this.setState({ email })} />
                 </InputGroup>
                 <InputGroup style={styles.input}>
                   <Icon name="ios-unlock-outline" />
                   <Input
                     placeholder="PASSWORD"
                     secureTextEntry
+                     onChangeText={password => this.setState({ password })}
                   />
                 </InputGroup>
-                <Button style={styles.btn} onPress={() => this.replaceRoute('home')}>
+                <Button style={styles.btn} onPress={() => this.onLoginButtonClick()}>
                   Login
                 </Button>
               </View>
@@ -66,8 +73,16 @@ class Login extends Component {
 function bindActions(dispatch) {
   return {
     replaceRoute: route => dispatch(replaceRoute(route)),
-    setUser: name => dispatch(setUser(name)),
+    loginUser: name => dispatch(loginUser(name)),
   };
 }
 
-export default connect(null, bindActions)(Login);
+function mapStateToProps(state) {
+  return {
+    name: state.user.firstname,
+    email: state.user.email,
+    telephone: state.user.telephone,
+    error: state.user.error,
+  };
+}
+export default connect(mapStateToProps, bindActions)(Login);

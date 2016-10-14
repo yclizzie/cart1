@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Login from '../../components/login/';
-import Home from '../../components/home/';
+import Shop from '../../components/shop/';
 import BlankPage from '../../components/blankPage';
 
 var ReactNative = require('react-native');
@@ -65,7 +65,7 @@ class TabBar extends React.Component {
               selectedTab: 'blueTab',
             });
           }}>
-          <Home content={this.state.content}/>
+          <Shop content={this.state.content}/>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           systemIcon="history"

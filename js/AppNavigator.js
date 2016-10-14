@@ -6,14 +6,15 @@ import { Drawer } from 'native-base';
 
 import { closeDrawer } from './actions/drawer';
 import { popRoute } from './actions/route';
+import { loadInitialData } from './actions/main';
 
 import Login from './components/login/';
-import Home from './components/home/';
+import Shop from './components/shop/';
 import BlankPage from './components/blankPage';
 import TabBar from './components/tabBar';
+import ItemList from './components/itemList';
 import SplashPage from './components/splashscreen/';
 import SideBar from './components/sideBar';
-import CategoryPage from './components/categoryPage';
 import { statusBarColor } from './themes/base-theme';
 
 Navigator.prototype.replaceWithAnimation = function replaceWithAnimation(route) {
@@ -45,6 +46,8 @@ class AppNavigator extends Component {
   static propTypes = {
     drawerState: React.PropTypes.string,
     popRoute: React.PropTypes.func,
+    dispatch: React.PropTypes.func,
+    loadInitialData: React.PropTypes.func,
     closeDrawer: React.PropTypes.func,
   }
 
@@ -61,6 +64,9 @@ class AppNavigator extends Component {
       this.popRoute();
       return true;
     });
+
+    this.loadInitialData();
+
   }
 
   componentDidUpdate() {
@@ -72,6 +78,10 @@ class AppNavigator extends Component {
     if (this.props.drawerState === 'closed') {
       this._drawer.close();
     }
+  }
+
+  loadInitialData() {
+    this.props.loadInitialData();
   }
 
   popRoute() {
@@ -94,18 +104,23 @@ class AppNavigator extends Component {
       case 'splashscreen':
         return <SplashPage navigator={navigator} />;
       case 'login':
-       return  <TabBar tab="greenTab" navigator={navigator} />;
-        //return <Login navigator={navigator} />;
+       //return  <TabBar tab="greenTab" navigator={navigator} />;
+       return <Login navigator={navigator} />;
+      // case 'home':
+      //  return  <TabBar tab="blueTab"  content="home" navigator={navigator} />;
+        //return <Home navigator={navigator} />;
+      case 'shop':
       case 'home':
-       return  <TabBar tab="blueTab" navigator={navigator} />;
+       return  <TabBar tab="blueTab"  content="shop" navigator={navigator} />;
         //return <Home navigator={navigator} />;
       case 'blankPage':
-        return  <TabBar tab="redTab" navigator={navigator} />;
-        //return <BlankPage navigator={navigator} />;
+        //return  <TabBar tab="redTab" navigator={navigator} />;
+        return <BlankPage navigator={navigator} />;
       case 'tabBar':
         return  <TabBar tab="blueTab" navigator={navigator} />;
-      case 'categoryPage':
-        return  <TabBar tab="blueTab" content="category" navigator={navigator} />;
+      case 'itemList':
+      //return <ItemList navigator={navigator} />;
+        return  <TabBar tab="blueTab" content="itemList" navigator={navigator} />;
       default :
         return <Login navigator={navigator} />;
     }
@@ -134,7 +149,7 @@ class AppNavigator extends Component {
           }}
           configureScene={() => Navigator.SceneConfigs.FloatFromRight}
           initialRoute={{
-            id: (Platform.OS === 'android') ? 'splashscreen' : 'home',
+            id: (Platform.OS === 'android') ? 'splashscreen' : 'shop',
             statusBarHidden: true,
           }}
           renderScene={this.renderScene}
@@ -147,6 +162,7 @@ class AppNavigator extends Component {
 const bindAction = dispatch => ({
   closeDrawer: () => dispatch(closeDrawer()),
   popRoute: () => dispatch(popRoute()),
+  loadInitialData: () => dispatch(loadInitialData()),
 });
 
 const mapStateToProps = state => ({

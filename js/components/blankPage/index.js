@@ -33,8 +33,8 @@ class BlankPage extends Component {
 
           <Title>{(name) ? this.props.name : 'Blank Page'}</Title>
 
-          <Button transparent onPress={this.props.openDrawer}>
-            <Icon name="ios-menu" />
+          <Button transparent onPress={() => this.replaceRoute('cart')}>
+            <Icon name="ios-cart" />
           </Button>
         </Header>
 
