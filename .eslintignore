@@ -1,3 +1,4 @@
 js/components/picker/index.js
 js/components/**/styles.js
 js/actions/**.js
+js/reducers/**.js

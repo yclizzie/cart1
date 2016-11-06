@@ -8,6 +8,7 @@ import {
   POP_TO_ROUTE,
   REPLACE_ROUTE,
   REPLACE_OR_PUSH_ROUTE,
+  PUSH_NEW_ROUTE_NO_NAV
 } from '../actions/route';
 
 export type State = {
@@ -15,7 +16,7 @@ export type State = {
 }
 
 const initialState = {
-  routes: ['login'],
+  routes: ['itemList'],
 };
 
 export default function (state:State = initialState, action:Action): State {
@@ -23,6 +24,14 @@ export default function (state:State = initialState, action:Action): State {
   if (action.type === PUSH_NEW_ROUTE) {
     // console.log(action.route, "route");
     globalNav.navigator.push({ id: action.route });
+    return {
+      routes: [...state.routes, action.route],
+    };
+  }
+
+  if (action.type === PUSH_NEW_ROUTE_NO_NAV) {
+    // console.log(action.route, "route");
+    globalNav.navigator.resetTo({ id: action.route });
     return {
       routes: [...state.routes, action.route],
     };
@@ -41,15 +50,15 @@ export default function (state:State = initialState, action:Action): State {
   if (action.type === REPLACE_OR_PUSH_ROUTE) {
     let routes = state.routes;
 
-    if (routes[routes.length - 1] === 'home') {
+    if (routes[routes.length - 1] === 'itemList') {
       // If top route is home and user navigates to a route other than home, then push
-      if (action.route !== 'home') {
+      if (action.route !== 'itemList') {
         globalNav.navigator.push({ id: action.route });
       } else { // If top route is home and user navigates to home, do nothing
         routes = [];
       }
-    } else if (action.route === 'home') {
-      globalNav.navigator.resetTo({ id: 'home' });
+    } else if (action.route === 'itemList') {
+      globalNav.navigator.resetTo({ id: 'itemList' });
       routes = [];
     } else {
       globalNav.navigator.replaceWithAnimation({ id: action.route });
