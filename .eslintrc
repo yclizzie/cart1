@@ -9,6 +9,14 @@
     ],
     "rules": {
         "no-underscore-dangle": "off",
+        "camelcase" : "off",
+        "max-len": "off",
+        "react/prefer-stateless-function": "off",
+        "prefer-template": "off",
+        "no-restricted-syntax": "off",
+        "no-prototype-builtins": "off",
+        "array-callback-return": "off",
+        "class-methods-use-this": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
     },
     "settings": {
