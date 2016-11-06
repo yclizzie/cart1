@@ -88,8 +88,11 @@ export default {
 
 
   // Font
-  fontFamily: (Platform.OS === 'ios') ? 'HelveticaNeue' : 'Roboto',
+  fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto',
   fontSizeBase: 15,
+  fontSizeSmallBase: 14,
+  fontColorBase: '#333',
+  fontLetterSpacing: 1,
 
   get fontSizeH1() {
     return this.fontSizeBase * 1.8;
@@ -192,11 +195,11 @@ export default {
   // Tabs
   tabBgColor: '#F8F8F8',
   tabFontSize: 15,
-  tabTextColor: '#fff',
+  tabTextColor: '#888',
 
 
   // Text
-  textColor: '#000',
+  textColor: '#666',
   inverseTextColor: '#fff',
 
 
