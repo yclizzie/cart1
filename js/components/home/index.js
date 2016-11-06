@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Picker } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Text, Button, Icon } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
@@ -40,13 +40,27 @@ class Home extends Component {
               </Row>
             )}
           </Grid>
+          <Picker
+  selectedValue='js'
+  onValueChange={(lang) => this.setState({language: lang})}>
+  <Picker.Item label="Java" value="java" />
+  <Picker.Item label="JavaScript" value="js" />
+  <Picker.Item label="Java" value="java1" />
+  <Picker.Item label="JavaScript" value="js1" />
+    <Picker.Item label="Java" value="java2" />
+  <Picker.Item label="JavaScript" value="js2" />
+    <Picker.Item label="Java" value="java3" />
+  <Picker.Item label="JavaScript" value="js3" />
+    <Picker.Item label="Java" value="java4" />
+  <Picker.Item label="JavaScript" value="js4" />
+</Picker>
         </Content>
       </Container>
     );
   }
 }
 
-function bindAction(dispatch) {
+ function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
     popRoute: () => dispatch(popRoute()),
