@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { BackAndroid, Platform, StatusBar, Navigator, View, ScrollView, Text} from 'react-native';
+import { BackAndroid, Platform, StatusBar, Navigator } from 'react-native';
 import { connect } from 'react-redux';
 import { Drawer } from 'native-base';
 
@@ -8,13 +8,14 @@ import { closeDrawer } from './actions/drawer';
 import { popRoute } from './actions/route';
 import { loadInitialData } from './actions/main';
 
-import Login from './components/login/';
-import Shop from './components/shop/';
+import Login from './components/login';
 import BlankPage from './components/blankPage';
+import Product from './components/product';
 import TabBar from './components/tabBar';
-import ItemList from './components/itemList';
-import SplashPage from './components/splashscreen/';
+import SplashPage from './components/splashscreen';
 import SideBar from './components/sideBar';
+import CVSMap from './components/cvsMap';
+
 import { statusBarColor } from './themes/base-theme';
 
 Navigator.prototype.replaceWithAnimation = function replaceWithAnimation(route) {
@@ -46,7 +47,6 @@ class AppNavigator extends Component {
   static propTypes = {
     drawerState: React.PropTypes.string,
     popRoute: React.PropTypes.func,
-    dispatch: React.PropTypes.func,
     loadInitialData: React.PropTypes.func,
     closeDrawer: React.PropTypes.func,
   }
@@ -58,7 +58,6 @@ class AppNavigator extends Component {
       const routes = this._navigator.getCurrentRoutes();
 
       if (routes[routes.length - 1].id === 'home' || routes[routes.length - 1].id === 'login') {
-                // CLose the app
         return false;
       }
       this.popRoute();
@@ -66,11 +65,9 @@ class AppNavigator extends Component {
     });
 
     this.loadInitialData();
-
   }
 
   componentDidUpdate() {
-    // console.log(this.props.routes, 'wdwdwd');
     if (this.props.drawerState === 'opened') {
       this.openDrawer();
     }
@@ -104,23 +101,30 @@ class AppNavigator extends Component {
       case 'splashscreen':
         return <SplashPage navigator={navigator} />;
       case 'login':
-       //return  <TabBar tab="greenTab" navigator={navigator} />;
-       return <Login navigator={navigator} />;
-      // case 'home':
-      //  return  <TabBar tab="blueTab"  content="home" navigator={navigator} />;
-        //return <Home navigator={navigator} />;
+        return <Login navigator={navigator} />;
       case 'shop':
       case 'home':
-       return  <TabBar tab="blueTab"  content="shop" navigator={navigator} />;
-        //return <Home navigator={navigator} />;
+        return <TabBar tab="blueTab" content="shop" navigator={navigator} />;
+      case 'checkout':
+        return <TabBar tab="blueTab" content="checkout" navigator={navigator} />;
       case 'blankPage':
-        //return  <TabBar tab="redTab" navigator={navigator} />;
         return <BlankPage navigator={navigator} />;
+      case 'shippingmethods':
+        return <TabBar tab="yellowTab" content="shippingmethods" navigator={navigator} />;
+      case 'shippingaddress':
+        return <TabBar tab="yellowTab" content="shippingaddress" navigator={navigator} />;
+      case 'cart':
+        return <TabBar tab="yellowTab" content="cartview" navigator={navigator} />;
+      case 'product':
+        return <Product navigator={navigator} />;
+      case 'cvsmapfami':
+        return <CVSMap type="FAMI" navigator={navigator} />;
+      case 'cvsmapunimart':
+        return <CVSMap type="UNIMART" navigator={navigator} />;
       case 'tabBar':
-        return  <TabBar tab="blueTab" navigator={navigator} />;
+        return <TabBar tab="blueTab" navigator={navigator} />;
       case 'itemList':
-      //return <ItemList navigator={navigator} />;
-        return  <TabBar tab="blueTab" content="itemList" navigator={navigator} />;
+        return <TabBar tab="blueTab" content="itemList" navigator={navigator} />;
       default :
         return <Login navigator={navigator} />;
     }
