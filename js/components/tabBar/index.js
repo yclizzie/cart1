@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import Login from '../../components/login/';
 import Shop from '../../components/shop/';
 import BlankPage from '../../components/blankPage';
+import Cart from '../../components/cart';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { pushNewRoute } from '../../actions/route';
 
 var ReactNative = require('react-native');
 var {
@@ -23,17 +26,20 @@ class TabBar extends React.Component {
 
   static propTypes = {
     setIndex: React.PropTypes.func,
-    replaceOrPushRoute: React.PropTypes.func,
+    pushNewRoute: React.PropTypes.func,
+    count: React.PropTypes.number,
   }
 
   constructor(props) {
     super(props);
     this.state = {
       selectedTab: this.props.tab,
-      content: this.props.content,
-      notifCount: 0,
       presses: 0
     };
+  }
+
+  pushNewRoute(route) {
+    this.props.pushNewRoute(route);
   }
   // state = {
   //   selectedTab: 'blueTab',
@@ -53,47 +59,66 @@ class TabBar extends React.Component {
   render() {
     return (
       <TabBarIOS
-        unselectedTintColor="yellow"
-        tintColor="white"
-        barTintColor="darkslateblue">
-        <TabBarIOS.Item
-          title="Blue Tab"
-          icon={{uri: base64Icon, scale: 3}}
+        unselectedTintColor="#888"
+        tintColor="#666"
+        barTintColor="#eee">
+        <Icon.TabBarItem
+          title="Shop"
+          iconName="ios-home-outline"
+          selectedIconName="ios-home"
+          iconColor="#888"
+          renderAsOriginal={true}
           selected={this.state.selectedTab === 'blueTab'}
           onPress={() => {
             this.setState({
               selectedTab: 'blueTab',
             });
           }}>
-          <Shop content={this.state.content}/>
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          systemIcon="history"
-          badge={this.state.notifCount > 0 ? this.state.notifCount : undefined}
+          <Shop content={this.props.content}/>
+        </Icon.TabBarItem>
+        <Icon.TabBarItem
+          title="Search"
+          iconName="ios-search-outline"
+          selectedIconName="ios-search"
+          iconColor="#888"
+          renderAsOriginal={true}
           selected={this.state.selectedTab === 'redTab'}
           onPress={() => {
             this.setState({
               selectedTab: 'redTab',
-              notifCount: this.state.notifCount + 1,
             });
           }}>
          <BlankPage />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-         systemIcon="history"
-          // icon={require('./flux.png')}
-          // selectedIcon={require('./relay.png')}
-          renderAsOriginal
-          title="Bag"
+        </Icon.TabBarItem>
+        <Icon.TabBarItem
+          title="Cart"
+          iconName="ios-basket-outline"
+          selectedIconName="ios-basket"
+          iconColor="#888"
+          renderAsOriginal={true}
+          badge={this.props.count > 0 ? this.props.count : undefined}
+          selected={this.state.selectedTab === 'yellowTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'yellowTab',
+            });
+          }}>
+         <Cart content={this.props.content}/>
+        </Icon.TabBarItem>
+        <Icon.TabBarItem
+          title="Account"
+          iconColor="#888"
+          renderAsOriginal={true}
+          iconName="ios-contact-outline"
+          selectedIconName="ios-contact"
           selected={this.state.selectedTab === 'greenTab'}
           onPress={() => {
             this.setState({
               selectedTab: 'greenTab',
-              presses: this.state.presses + 1
             });
           }}>
           <Login />
-        </TabBarIOS.Item>
+        </Icon.TabBarItem>
       </TabBarIOS>
     );
   }
@@ -101,9 +126,16 @@ class TabBar extends React.Component {
 
 function bindAction(dispatch) {
   return {
-
+    pushNewRoute: route => dispatch(pushNewRoute(route)),
   };
 }
+
+function mapStateToProps(state) {
+  return {
+    count: state.cart.totalCount
+  };
+}
+
 
 var styles = StyleSheet.create({
   tabContent: {
@@ -116,4 +148,4 @@ var styles = StyleSheet.create({
   },
 });
 
-export default connect(null, bindAction)(TabBar);
+export default connect(mapStateToProps, bindAction)(TabBar);
