@@ -23,4 +23,18 @@ module.exports = StyleSheet.create({
   mt: {
     marginTop: 20,
   },
+  badge: {
+    position:'absolute',
+    top:-5,
+    right:-5,
+    width:25,
+    height:25,
+    borderRadius:30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#e54e78'
+  },
+  badgeText: {
+    color: '#FFF'
+  }
 });

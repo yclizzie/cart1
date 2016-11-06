@@ -1,111 +1,83 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ListView } from 'react-native';
-import { Container, Thumbnail, Header, Footer, Title, Content, Text, Button, Icon } from 'native-base';
-import { Image } from 'react-native';
-import { openDrawer } from '../../actions/drawer';
-import { popRoute } from '../../actions/route';
-import TabBar from '../../components/tabBar/';
+import { Dimensions, TouchableHighlight, StyleSheet, Image } from 'react-native';
+import { Text, View } from 'native-base';
 import styles from './styles';
-import { getVisibleProducts } from '../../reducers/products';
+import style from '../../themes/base-style';
+import { getProductsByProductIds } from '../../reducers/products';
+import { productClick } from '../../actions/main';
+import { replaceRoute } from '../../actions/route';
 
 class ItemList extends Component {
 
   static propTypes = {
-  products: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.number,
-    title: React.PropTypes.string,
-    price: React.PropTypes.number,
-    inventory: React.PropTypes.number,
-  })),
-    popRoute: React.PropTypes.func,
-    openDrawer: React.PropTypes.func,
-    name: React.PropTypes.string,
-    index: React.PropTypes.number,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
-  }
-
-  popRoute() {
-    this.props.popRoute();
+    products: React.PropTypes.arrayOf(React.PropTypes.object),
+    productClick: React.PropTypes.func,
+    replaceRoute: React.PropTypes.func,
   }
 
   constructor(props) {
     super(props);
+
     this.state = {
       isLoadingTail: false,
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      })
     };
   }
 
-  componentDidMount() {
-        this._data = [];
-        this.setState({
-            dataSource: this.getDataSource(this.props.products)
-        });
+  onProductClick(id) {
+    this.props.productClick(id);
+    this.navigateTo('product');
+  }
+
+  navigateTo(route) {
+    this.props.replaceRoute(route);
   }
 
   _renderRow(item) {
-        return (
-            <View style={styles.item}>
-                <Image style={styles.image} source={{uri: 'https://s.yimg.com/hg/pimg2/a3/27/p034051669171-item-2322xf2x0600x0600-m.jpg'}}/>
-                <Text style={styles.text}>{item.title}</Text>
-            </View>
-        );
+    const width = Dimensions.get('window').width;
+    if (item) {
+      return (
+        <View key={item.product_id} style={Object.assign({ width: (width - 10) * 0.5, height: ((width - 10) * 0.5) + 60 }, StyleSheet.flatten(styles.item))}>
+          <TouchableHighlight onPress={() => this.onProductClick(item.product_id)}>
+            <Image style={Object.assign({ width: (width - 10) * 0.5, height: (width - 10) * 0.5 }, StyleSheet.flatten(styles.image))} source={{ uri: item.image }} />
+          </TouchableHighlight>
+          <Text style={[style.baseText, styles.text]}>{item.name}</Text>
+          <View style={[style.flexRow, { paddingBottom: 5, alignSelf: 'center' }]}>
+            <Text style={[style.baseText, styles.price]} /* eslint-disable */>{item.price}  </Text /* eslint-enable */>
+            <Text style={[style.baseText, styles.special]} /* eslint-disable */>  {item.special}</Text /* eslint-enable */>
+
+          </View>
+        </View>
+      );
     }
-
-    // onEndReached () {
-    //     console.log('onEndReached', this.state.isLoadingTail);
-    //     if (this.state.isLoadingTail) {
-    //         // We're already fetching
-    //         return;
-    //     }
-    //     this.setState({
-    //         isLoadingTail: true
-    //     });
-
-    //     this.setState({
-    //         isLoadingTail: false,
-    //         dataSource: this.getDataSource(this.props.products)
-    //     });
-    // }
-
-    getDataSource(products):ListView.DataSource {
-        this._data = this._data.concat(products);
-        return this.state.dataSource.cloneWithRows(this._data);
-    }
+    return null;
+  }
 
   render() {
-    const { props: { name, index, list, products } } = this;
+    const { props: { products } } = this;
 
     return (
-        <ListView
-          dataSource={this.state.dataSource}
-          initialListSize={100}
-          renderRow={this._renderRow}
-          //onEndReached={this.onEndReached.bind(this)}
-          contentContainerStyle={styles.list}>
-        </ListView>
-
+      <View style={style.flexRow}>
+        {products.map(product => this._renderRow(product)
+        )}
+      </View>
     );
   }
 }
 
 function bindAction(dispatch) {
   return {
-    openDrawer: () => dispatch(openDrawer()),
-    popRoute: () => dispatch(popRoute()),
+    productClick: id => dispatch(productClick(id)),
+    replaceRoute: route => dispatch(replaceRoute(route)),
+
   };
 }
 
 function mapStateToProps(state) {
   return {
-    name: state.user.name,
-    index: state.list.selectedIndex,
-    list: state.list.list,
-    products: getVisibleProducts(state.products),
+    category: state.main.category,
+    products: getProductsByProductIds(state.products, state.main.category.products),
   };
 }
 

@@ -10,21 +10,30 @@ module.exports = StyleSheet.create({
    list: {
         justifyContent: 'center',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        flex: 1
     },
     text: {
     	alignSelf:'center',
-    	fontSize: 10
+        paddingTop:5,
+        paddingBottom:3,
+    	fontSize: 12
+    },
+    price: {
+        color: '#a8a8a8',
+        textDecorationLine: 'line-through',
+        fontSize:12
+    },
+    special: {
+        letterSpacing:1,
+        fontSize:12,
+        fontWeight:'600'
     },
     image: {
-    	 alignSelf:'center',
-    	 width: 120,
-    	 height: 120
+    	 alignSelf:'center'
     },
     item: {
-        backgroundColor: '#CCC',
-        margin: 10,
-        width: 150,
-        height: 150
+        //backgroundColor: '#CCC',
+        margin: 1
     }
 });

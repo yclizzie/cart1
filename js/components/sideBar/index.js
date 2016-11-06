@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Content, Text, List, ListItem } from 'native-base';
-
-import { setIndex } from '../../actions/list';
 import { closeDrawer } from '../../actions/drawer';
-import { replaceOrPushRoute } from '../../actions/route';
+import { replaceRoute } from '../../actions/route';
+import { categoryClick } from '../../actions/main';
+import Category from '../../components/category';
 import myTheme from '../../themes/base-theme';
 import styles from './style';
 
@@ -13,17 +13,24 @@ class SideBar extends Component {
 
   static propTypes = {
     closeDrawer: React.PropTypes.func,
-    setIndex: React.PropTypes.func,
-    replaceOrPushRoute: React.PropTypes.func,
+    replaceRoute: React.PropTypes.func,
+    categoryClick: React.PropTypes.func,
+    categories: React.PropTypes.arrayOf(React.PropTypes.object),
+  }
+
+  onCategoryClick(category) {
+    this.props.closeDrawer();
+    this.props.categoryClick(category);
+    this.navigateTo('itemList');
   }
 
   navigateTo(route) {
     this.props.closeDrawer();
-    this.props.setIndex(undefined);
-    this.props.replaceOrPushRoute(route);
+    this.props.replaceRoute(route);
   }
 
   render() {
+    const categories = this.props.categories;
     return (
       <Content theme={myTheme} style={styles.sidebar} >
         <List>
@@ -33,9 +40,14 @@ class SideBar extends Component {
           <ListItem button onPress={() => this.navigateTo('blankPage')} >
             <Text>Blank Page</Text>
           </ListItem>
+          <ListItem button onPress={() => this.navigateTo('checkout')} >
+            <Text>Checkout Page</Text>
+          </ListItem>
           <ListItem button onPress={() => this.navigateTo('itemList')} >
             <Text>Category Page</Text>
           </ListItem>
+          {categories.map(category => <Category key={category.category_id} category={category} />
+          )}
         </List>
       </Content>
     );
@@ -45,9 +57,14 @@ class SideBar extends Component {
 function bindAction(dispatch) {
   return {
     closeDrawer: () => dispatch(closeDrawer()),
-    replaceOrPushRoute: route => dispatch(replaceOrPushRoute(route)),
-    setIndex: index => dispatch(setIndex(index)),
+    categoryClick: (id, name) => dispatch(categoryClick(id, name)),
+    replaceRoute: route => dispatch(replaceRoute(route)),
   };
 }
 
-export default connect(null, bindAction)(SideBar);
+function mapStateToProps(state) {
+  return {
+    categories: state.main.categories,
+  };
+}
+export default connect(mapStateToProps, bindAction)(SideBar);
