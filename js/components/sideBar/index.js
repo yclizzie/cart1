@@ -5,7 +5,7 @@ import { Content, Text, List, ListItem } from 'native-base';
 import { closeDrawer } from '../../actions/drawer';
 import { replaceRoute } from '../../actions/route';
 import { categoryClick } from '../../actions/main';
-import Category from '../../components/category';
+import CategoryMenu from '../../components/categoryMenu';
 import myTheme from '../../themes/base-theme';
 import styles from './style';
 
@@ -46,7 +46,7 @@ class SideBar extends Component {
           <ListItem button onPress={() => this.navigateTo('itemList')} >
             <Text>Category Page</Text>
           </ListItem>
-          {categories.map(category => <Category key={category.category_id} category={category} />
+          {categories.map(category => <CategoryMenu key={category.category_id} category={category} />
           )}
         </List>
       </Content>

@@ -48,7 +48,7 @@ class ShippingTW extends Component {
 
     return (
       <View>
-        <View style={[style.flewRow, styles.zoneRow]}>
+        <View style={[style.flexRow, styles.zoneRow]}>
           <Thumbnail style={{ borderRadius: 0, marginLeft: -5, marginTop: 5 }} source={{ uri: 'https://www.red-house.com.tw/catalog/view/theme/default/image/flat.png' }} />
           <View style={{ width: width / 3 }}>
             <Input keyboardType="numeric" value={this.state.zipcode} onChangeText={text => this.onZipcodeChanged(text)} onEndEditing={e => this.onZipcodeEntered(e.nativeEvent.text)} placeholder={I18n.t('text_zipcode')} />

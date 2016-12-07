@@ -1,20 +1,20 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, TouchableHighlight, StyleSheet, Image } from 'react-native';
-import { Text, View } from 'native-base';
+import { Dimensions, TouchableHighlight, StyleSheet, Image, ScrollView } from 'react-native';
+import { Text, View, Header } from 'native-base';
 import styles from './styles';
 import style from '../../themes/base-style';
 import { getProductsByProductIds } from '../../reducers/products';
 import { productClick } from '../../actions/main';
-import { replaceRoute } from '../../actions/route';
+import { pushNewRoute } from '../../actions/route';
 
 class ItemList extends Component {
 
   static propTypes = {
     products: React.PropTypes.arrayOf(React.PropTypes.object),
     productClick: React.PropTypes.func,
-    replaceRoute: React.PropTypes.func,
+    pushNewRoute: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -31,12 +31,15 @@ class ItemList extends Component {
   }
 
   navigateTo(route) {
-    this.props.replaceRoute(route);
+    this.props.pushNewRoute(route);
   }
 
   _renderRow(item) {
     const width = Dimensions.get('window').width;
+
     if (item) {
+      const newprice = item.special ? item.special : item.price;
+      const price = item.special ? item.price : null;
       return (
         <View key={item.product_id} style={Object.assign({ width: (width - 10) * 0.5, height: ((width - 10) * 0.5) + 60 }, StyleSheet.flatten(styles.item))}>
           <TouchableHighlight onPress={() => this.onProductClick(item.product_id)}>
@@ -44,8 +47,8 @@ class ItemList extends Component {
           </TouchableHighlight>
           <Text style={[style.baseText, styles.text]}>{item.name}</Text>
           <View style={[style.flexRow, { paddingBottom: 5, alignSelf: 'center' }]}>
-            <Text style={[style.baseText, styles.price]} /* eslint-disable */>{item.price}  </Text /* eslint-enable */>
-            <Text style={[style.baseText, styles.special]} /* eslint-disable */>  {item.special}</Text /* eslint-enable */>
+            { price ? <Text style={[style.baseText, styles.price]} /* eslint-disable */>{price}   </Text /* eslint-enable */> : null }
+            <Text style={[style.baseText, styles.special]} /* eslint-disable */>{newprice}</Text /* eslint-enable */>
 
           </View>
         </View>
@@ -58,9 +61,11 @@ class ItemList extends Component {
     const { props: { products } } = this;
 
     return (
-      <View style={style.flexRow}>
+      <View>
+      <View style={[style.flexRow, {marginTop: -20}]}>
         {products.map(product => this._renderRow(product)
         )}
+      </View>
       </View>
     );
   }
@@ -69,7 +74,7 @@ class ItemList extends Component {
 function bindAction(dispatch) {
   return {
     productClick: id => dispatch(productClick(id)),
-    replaceRoute: route => dispatch(replaceRoute(route)),
+    pushNewRoute: route => dispatch(pushNewRoute(route)),
 
   };
 }

@@ -16,10 +16,7 @@ module.exports = StyleSheet.create({
   },
   cartProductSpecial:{
     letterSpacing: 1,
-    fontSize: 16,
-    lineHeight: 16,
-    color: "#F57F7F",
-    fontWeight: '600'
+    color: "#666"
   },
   elementContainer: {
     paddingLeft: 10,
@@ -35,13 +32,11 @@ module.exports = StyleSheet.create({
   },
   cartProductName: {
     letterSpacing: 1,
-    fontSize: 14,
-    lineHeight: 20
+    fontSize: 14
   },
   cartColorSizeLabel:{
     letterSpacing: 1,
     fontSize: 12,
-    lineHeight: 18,
     color: "#888"
   },
   cartQuantityLabel:{

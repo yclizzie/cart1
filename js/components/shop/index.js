@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Title, Content, Text, Button, Icon, View } from 'native-base';
-import { Image } from 'react-native';
+import { Container, Header, Title, Content, Button, Icon, View } from 'native-base';
+import { Image, TouchableOpacity, Text } from 'react-native';
 import IconM from 'react-native-vector-icons/MaterialIcons';
 import { openDrawer } from '../../actions/drawer';
 import { pushNewRoute } from '../../actions/route';
@@ -35,6 +35,10 @@ class Shop extends Component {
       return <Checkout />;
     }
 
+    if (this.props.content === 'shop') {
+      return <Home />;
+    }
+
     if (this.props.categoryname) {
       return <ItemList />;
     }
@@ -46,8 +50,13 @@ class Shop extends Component {
     this.props.pushNewRoute(route);
   }
 
+  _onSortClick(type) {
+
+  }
+
   render() {
-    const content = this.getContent();
+    const content = this.getContent(),
+          showSortBar = this.props.content !== 'checkout' && this.props.content !== 'shop' && this.props.categoryname;
 
     return (
       <Container theme={myTheme} style={styles.container}>
@@ -65,6 +74,14 @@ class Shop extends Component {
             </View>
           </Button>
         </Header>
+        {showSortBar ?
+        <View style={[styles.headerBar, style.flexRow]}>
+          <TouchableOpacity onPress={this._onSortClick('VIEWED')}><Text style={styles.sortText}>人氣商品</Text></TouchableOpacity>
+          <Text style={[styles.sortText, styles.sortSeparator]}>  |  </Text>
+          <TouchableOpacity onPress={this._onSortClick('DATE_ADDED')}><Text style={[styles.sortText, styles.sortTextSelected]}>最新商品</Text></TouchableOpacity>
+          <Text style={[styles.sortText, styles.sortSeparator]}>  |  </Text>
+          <TouchableOpacity onPress={this._onSortClick('PRICE')}><Text style={styles.sortText}>價格高低</Text></TouchableOpacity>
+        </View> : null}
         <Content>
           {content}
         </Content>

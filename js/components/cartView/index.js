@@ -28,7 +28,7 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    this.loadCartProductsData();
+    this.props.loadCartProductsData();
   }
 
   onProductClick(id) {
@@ -54,10 +54,6 @@ class Cart extends Component {
 
   onApplyVoucer() {
     this.props.onApplyVoucher(this.state.voucher);
-  }
-
-  loadCartProductsData() {
-    this.props.loadCartProductsData();
   }
 
   _onAlertClick() {
@@ -127,8 +123,7 @@ class Cart extends Component {
                         </TouchableOpacity>
                       </View>
                       <View style={[style.flexRow, cartStyle.elementContainer, { justifyContent: 'space-between' }]}>
-                        <Text style={cartStyle.cartProductTotal}>{product.total}</Text>
-                        <Text style={cartStyle.cartProductSpecial}>{product.special_total}</Text>
+                        <Text style={cartStyle.cartProductSpecial}>{product.total}</Text>
                       </View>
                     </View>
                   </View>

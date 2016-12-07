@@ -7,6 +7,7 @@ import I18n from 'react-native-i18n';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { popRoute, replaceRoute } from '../../actions/route';
 import { checkout } from '../../actions/main';
+import { loadCartProductsData } from '../../actions/cart';
 import styles from './styles';
 import style from '../../themes/base-style';
 import ShippingReceiver from '../../components/shippingReceiver';
@@ -47,6 +48,7 @@ class ShippingAddress extends Component {
 
   static propTypes = {
     totals: React.PropTypes.arrayOf(React.PropTypes.object),
+    loadCartProductsData: React.PropTypes.func,
     replaceRoute: React.PropTypes.func,
     popRoute: React.PropTypes.func,
     checkout: React.PropTypes.func,
@@ -61,6 +63,10 @@ class ShippingAddress extends Component {
       modalVisible: false,
       paymentModalVisible: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.loadCartProductsData();
   }
 
   onClosePaymentModal() {
@@ -164,7 +170,7 @@ class ShippingAddress extends Component {
             {this.state.showCart ? <CartItems /> : <View />}
           </View>
         </Content>
-        <Footer style={style.baseFooter}>
+        <Footer style={styles.footer}>
           <Button small block onPress={() => this.checkout()} style={style.baseButton}>
             <IconFA name="lock" />
             <Text style={[styles.baseText, { color: '#FFF', textAlign: 'center' }]}> {button.text}</Text>
@@ -191,6 +197,7 @@ function bindAction(dispatch) {
   return {
     popRoute: () => dispatch(popRoute()),
     replaceRoute: route => dispatch(replaceRoute(route)),
+    loadCartProductsData: () => dispatch(loadCartProductsData()),
     checkout: (order, address) => dispatch(checkout(order, address)),
   };
 }

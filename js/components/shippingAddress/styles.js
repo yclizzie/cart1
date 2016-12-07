@@ -28,5 +28,11 @@ module.exports = StyleSheet.create({
   },
   totalText: {
    fontWeight:'600',
-  }
+  },
+  footer: {
+    paddingBottom:95,
+    paddingLeft:10,
+    paddingRight:10,
+    borderTopWidth:0
+  },
 });

@@ -36,5 +36,28 @@ module.exports = StyleSheet.create({
   },
   badgeText: {
     color: '#FFF'
+  },
+  sortText: {
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#888'
+  },
+  sortSeparator: {
+    fontSize:14
+  },
+  sortTextSelected: {
+    color: '#333',
+    fontWeight: '600'
+  },
+  headerBar : {
+    justifyContent:'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingTop: 8,
+    paddingBottom: 8,
+    height: 40,
+    left: 0,
+    position: 'relative'
   }
 });

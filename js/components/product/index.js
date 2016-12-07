@@ -10,6 +10,7 @@ import Hr from 'react-native-hr';
 import Carousel from 'react-native-looped-carousel';
 import { popRoute, replaceRoute } from '../../actions/route';
 import { addToCartClick } from '../../actions/cart';
+import { IMAGE_BASE_URL } from '../../constants/Constants';
 import { showAlert } from '../../actions/main';
 import styles from './styles';
 import style from '../../themes/base-style';
@@ -81,7 +82,8 @@ class Product extends Component {
     let name = I18n.t('loading');
     let images = ['https://www.red-house.com.tw/image/catalog/logo.png'];
     let price = '';
-    let special = '';
+    let model = '';
+    let newprice = '';
     let tag = '';
     let meta_description = '';
     let description = '';
@@ -90,8 +92,9 @@ class Product extends Component {
     if (product) {
       name = product.name;
       images = product.images;
-      price = product.price;
-      special = product.special;
+      model = product.model;
+      price = product.special ? product.price : null;
+      newprice = product.special ? product.special : product.price;
       tag = product.tag;
       description = entities.decodeHTML(product.description);
       meta_description = product.meta_description;
@@ -134,20 +137,27 @@ class Product extends Component {
             <View style={{ flex: 1, alignItems: 'flex-start', flexWrap: 'wrap' }}>
               <Text adjustsFontSizeToFit style={[style.baseText, styles.productName]}>{name}</Text>
               <View style={[style.flexRow, { paddingBottom: 5 }]}>
-                <Text style={[style.baseText, styles.price, styles.textContainer]}>{price}</Text>
-                <Text style={[style.baseText, styles.special, styles.textContainer]}>{special}</Text>
+              { price ?
+                <Text style={[style.baseText, styles.price, styles.textContainer]}>{price}</Text> : <View />
+              }
+                <Text style={[style.baseText, styles.special, styles.textContainer]}>{newprice}</Text>
               </View>
-              <Text style={[style.baseText, styles.meta_description, styles.textContainer]}>{meta_description}</Text>
-              <Hr lineColor="#b3b3b3" />
+              { meta_description !== '' ?
+                <Text style={[style.baseText, styles.meta_description, styles.textContainer]}>{meta_description}</Text> : <View />
+              }
+              <View style={{ height: 1, width, backgroundColor: '#b3b3b3', marginBottom: 5, marginTop: 10 }} />
               <View style={[style.flexRow, { paddingBottom: 5, paddingTop: 10 }]}>
                 <Text style={[style.baseText, style.baseSmallText, styles.textContainer]}>{I18n.t('color')}</Text>
                 <Text style={[style.baseText, style.baseSmallText, styles.textContainer]}>{tag}</Text>
               </View>
-              <View style={{ flex: 1, flexDirection: 'column', height: 500, width }}>
-                <WebView
-                  source={{ html: '<!DOCTYPE html><html><body>' + description + '</body></html>' }}
-                  style={{ marginTop: 10 }}
-                />
+              <View style={{ flex: 1, flexDirection: 'column', width }}>
+                <Image resizeMode='contain' style={{ width: width - 10, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/d01.jpg' }} />
+                <Image resizeMode='contain' style={{ width: width - 10, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/d02.jpg' }} />
+                <Image resizeMode='contain' style={{ width: width - 10, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/d03.jpg' }} />
+                <Image resizeMode='contain' style={{ width: width - 10, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/d04.jpg' }} />
+                <Image resizeMode='contain' style={{ width: width - 10, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/d05.jpg' }} />
+                <Image resizeMode='contain' style={{ width, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/' + model + '-size.jpg' }} />
+                <Image resizeMode='contain' style={{ width, height: width, marginTop: 15, alignSelf: 'center' }} source={{ uri: IMAGE_BASE_URL + model + '/' + model + '-card.jpg' }} />
               </View>
             </View>
             <View>

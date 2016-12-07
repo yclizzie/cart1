@@ -75,7 +75,7 @@ class ShippingCVS extends Component {
         <View>
           <Modal animationType={'slide'} transparent={false} visible={this.state.modalVisible}>
             <View style={[styles.centering, { height, width }]}>
-              <CvsMap type={this.props.type} onCloseModal={() => this.onCloseModal} />
+              <CvsMap type={this.props.type} onCloseModal={this.onCloseModal.bind(this)} />
             </View>
           </Modal>
         </View>

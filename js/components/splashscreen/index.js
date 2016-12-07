@@ -12,7 +12,7 @@ export default class SplashPage extends Component {
     const navigator = this.props.navigator;
     setTimeout(() => {
       navigator.replace({
-        id: 'index',
+        id: 'shippingaddress',
       });
     }, 1500);
   }
